@@ -15,6 +15,9 @@ t = tagg.Tagg(t_str)
 t_str = t.t_str
 
 #export data:
+import os
+root_folder = os.path.abspath(os.pardir)
 output_file = 'test'
-with open('/home/jummcgrum/Desktop/static_simple/output/' + output_file, 'w') as fout:
+output_file = root_folder + '/output/' + output_file
+with open(output_file, 'w') as fout:
 	fout.write(t_str)
