@@ -13,3 +13,6 @@ This script populates tags inside of strings according to a tag dictionary, wher
 
 ### tagg.py
 This script runs python code inside of tags in a string. Tags are in the form {{code_to_run}}. Functions to be used with this must be listed in funcs.py
+
+## project_euler_solved.py
+My [Project Euler](https://projecteuler.net/) scripts.
