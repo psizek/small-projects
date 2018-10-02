@@ -1,0 +1,79 @@
+#Before starting
+
+'*.txt'    # serves as a wildcard for .txt files in pwd
+
+init           # initializes git in the working directory
+add <file>     # add file from pwd to staging repository
+commit         # commits the staging repository files to git repository
+rm <file>      # deletes files from the working directory and puts the deletes in the staging directory (commit will delete)
+
+#use checkout to grab a different commit.
+#tag when we have a successful "released" version that needs to be noted.
+
+#general workflow is: add -> commit -> check that everything works -> checkout master -> tag that commit -> move master.
+
+#----------
+#Looking at Git
+#----------
+diff              # diffs staging directory and git repository
+diff --staged     # diffs staging directory and pwd
+log               # grabs logs of Commits
+show <c>          # shows log for <c>
+
+
+#-------------
+Git repository manipulation commands
+#-------------
+
+<c>^<num>            # references one of the parent nodes of c (first branch is 1, second branch is 2, etc)
+<c>~<num>            # references the parent branch <num> levels above c
+                     # you can chain these together
+
+commit                        # creates commit as a child of HEAD, and moves HEAD to reference the new commit.
+commit -m "message text"      # creates a commit with the message "message text"
+commit --amend                # creates a new sideways commit - another child of the HEAD's parent. I think same as reset to parent+ a new commit
+
+branch <branch> {<c>}           # creates a new branch on c
+branch -f <branch> {<c>}        # moves branch to c
+branch -d <branch>              # deletes branch (not the commit)
+
+checkout <c>                   # switches HEAD to point to c.
+checkout -b <branch> {<c>}     # simultaneously creates a new branch on c and selects the new branch as the HEAD
+
+tag <tag> {<c>}     # creates a tag at c
+describe {<c>}      # describes where c is, in the form <tag>_<numCommits>_g<hash>
+
+merge <c>                        # merges HEAD with c and moves HEAD to the new node.
+rebase <c1> {<c2>}               # rebases c2 as a child of c1 and moves HEAD to c2. Note: rebase will rebase any parents until the versions management
+cherry-pick <c1> <c2> <etc.>     # adds commits sequentially to HEAD, with <c1> as <c2>'s parent
+rebase -i                        # rebase with a UI of some kind.
+
+
+reset <c>           # similar to checkout. See Notes. In terms of the git repository, it changes <c> so it points to HEAD.
+
+revert <c>          # creates commit "c's child" which reverses c such that "c's child" is now as the parent of c is. Useful for remote commits
+
+#-----------
+#remote
+#-----------
+
+add <remote> <git repository URL>     #
+
+clone               # clones git repository to a remote
+clone <remoteURL>   # clones the git repository at remoteURL
+
+checkout -b <branch1> <remote>/<branch2>           # links branch2 on remote to branch1 (can create branch1)
+checkout -u <remote>/<branch2> {<branch1>}         # same kinda linking except backwards
+
+fetch                                 # grabs commits from remote directory onto local git repository, doesn't sync local branches.
+fetch <remote> <branch2>              # only grabs commits from remote branch2 for the local git repository under the linked branch
+fetch <remote> <branch2>:<branch1>    # same as above, except explicitly gives commits to branch1
+fetch <remote> :<branch1>             # just creates a local branch, probably more to it.
+
+pull               # essentially, git fetch [options]; git merge [options]
+pull --rebase      # essentially, git fetch [options]; git rebase [options]
+
+push                                 # pushes commits from local directory onto remote directory, syncs branches
+push <remote> <branch1>              # implicitly pushes commits from branch1 to its link???????? maybe needs -u
+push <remote> <branch1>:<branch2>    # explicitly pushes commits from branch1 and puts them on branch2
+push <remote> :<branch2>             # creates a remote branch2, probably more to it.
