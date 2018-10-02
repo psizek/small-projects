@@ -1,8 +1,14 @@
 # small-projects
-Small scripts I've written for specific problems I'm having.
+Small scripts I've written for specific problems I'm having or just to practice programming skills
 
 
-## single_letter.sh
+## bash_scripts
+Contains a couple bash scripts.
+
+### rpl_spaces.sh
+Given an input directory, this change the filenames in that subdirectory so spaces become underscores. This is recursive.
+
+### single_letter.sh
 Given a input word, this returns a list of words that could be made by changing a single letter in that word. E.g. 'real' becomes 'teal', 'meal', 'deal', 'ream', etc.
 
 ## doc_gen_tool
