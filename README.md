@@ -16,3 +16,6 @@ This script runs python code inside of tags in a string. Tags are in the form {{
 
 ## project_euler_solved.py
 My [Project Euler](https://projecteuler.net/) scripts.
+
+## sudoku.py
+A tool for solving sudokus, a term which here means 'a structure in which no cell can share a value with any other cell within the same section'. Example case is at the bottom.
