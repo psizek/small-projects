@@ -1,6 +1,6 @@
 
-#returns a list of num's prime factors
 def get_prime_factor_ary(num):
+    """returns a list of num's prime factors"""
     temp_num = num
     prime_factor_array = []
     while temp_num > 1:
@@ -9,8 +9,9 @@ def get_prime_factor_ary(num):
         if temp_ary[1] != 1:
             prime_factor_array.append(temp_ary[1])
     return prime_factor_array
-#returns a dictionary of num's prime factors
+
 def get_prime_factor_dict(num):
+    """returns a dictionary of num's prime factors"""
     temp_num = num
     prime_factor_dict() = dict()
     while temp_num > 1:
@@ -20,17 +21,19 @@ def get_prime_factor_dict(num):
             prime_factor_dict[temp_ary[1]] = prime_factor_dict[temp_ary[1]] + 1
     return prime_factor_dict
 
-#returns (<num divided by it's smallest prime factor>, <smallest prime factor>)
-#if no smallest prime factor, returns (1,1)
 def findprimefactor(num):
+    """
+    returns (<num divided by it's smallest prime factor>, <smallest prime factor>)
+    if no smallest prime factor, returns (1,1)
+    """
     num = int(num)
     for i in range(2,num+1):
         if num%i == 0:
             return [num/i,i]
     return[1,1]
 
-#returns true if num is prime
 def isprime(num):
+    """returns true if num is prime"""
     num = int(num)
     sqrt = int((num**0.5)//1)
     for i in range(2,sqrt+1):
@@ -137,8 +140,9 @@ def euler10(num):
     print(total_primes)
 
 
-#returns a number in pascals triangle looked up by index (a,b). define a dictionary before using this function to improve efficiency
 def path(a,b,pascal_ary):
+    """returns a number in pascals triangle looked up by index (a,b). define a dictionary before using this function to improve efficiency"""
+
     if b > a:
         c = a
         a = b

@@ -4,30 +4,31 @@
 #check for more than one solution - which'd mean running brute a few times, which could have some efficiency problems.
 #generate sudoku? probably easiest solution is random fill in of values, and then subsequently checking/adding possible values until it's solved. Would need a "random generate" function.
 
-#Sudoku
-#desc: class that describes a sudoku, with methods for solving one. Cells locations are here given as tuples, although they can really be whatever you'd like.
-#attributes:
-#cell_list: list of all possible cell locations
-#sec_list: list of all sections. A section is a list of cell locations - this would correspond to a single row, column, or box in a 'traditional' sudoku
-#cell_dict: dict of actual cell values. This is typically empty or near empty initially.
-#p_cell_dict: dict of possible values for a given cell. These possible values decline as the sudoku is solved.
-#cell_sec_index: a dictionary which consists of {cell_location:corresponding sections}
-#has_error: if the sudoku encounters an error via logical contradiction, this gets set to true and parsing is disabled.
-#
-#USAGE:
-#initialization instruction:
-#1) populate the sec_list. You can add a single section with add_section(section)
-#2) put a list of cell locations into cell_list. This can be done with popl_from_sec_list()
-#3) populate p_cell_dict. This can be done with popl_p_dict()
-#4) run popl_cell_index(), which populates an index based on sec_list.
-#
-#running:
-#sudokus are calculated automatically whenever a value is set, and completes upon setting enough values. If this is insufficient to solve, use main() to do some brute force solving.
-#
-#results:
-#results are in cell_dict for each cell.
-#
 class Sudoku:
+	"""
+	desc: class that describes a sudoku, with methods for solving one. Cells locations are here given as tuples, although they can really be whatever you'd like.
+	attributes:
+	cell_list: list of all possible cell locations
+	sec_list: list of all sections. A section is a list of cell locations - this would correspond to a single row, column, or box in a 'traditional' sudoku
+	cell_dict: dict of actual cell values. This is typically empty or near empty initially.
+	p_cell_dict: dict of possible values for a given cell. These possible values decline as the sudoku is solved.
+	cell_sec_index: a dictionary which consists of {cell_location:corresponding sections}
+	has_error: if the sudoku encounters an error via logical contradiction, this gets set to true and parsing is disabled.
+
+	USAGE:
+	initialization instruction:
+	1) populate the sec_list. You can add a single section with add_section(section)
+	2) put a list of cell locations into cell_list. This can be done with popl_from_sec_list()
+	3) populate p_cell_dict. This can be done with popl_p_dict()
+	4) run popl_cell_index(), which populates an index based on sec_list.
+
+	running:
+	sudokus are calculated automatically whenever a value is set, and completes upon setting enough values. If this is insufficient to solve, use main() to do some brute force solving.
+
+	results:
+	results are in cell_dict for each cell.
+	"""
+
 	sec_list = []
 	cell_list = []
 	cell_dict = {}
@@ -39,32 +40,32 @@ class Sudoku:
 
 	#BUILDING
 
-	#add_section:
-	#desc: adds a section to sec_list
-	#params:
-	#section: a list of cell locations
 	def add_section(self,section):
+		"""
+		adds a section to sec_list
+
+		:param section: a list of cell locations
+		"""
 		self.sec_list.append(section)
 
-	#popl_cell_list
-	#desc: populates cell_list from cells listed in sec_list. If each cell is in at least one section, than this should populate all cells.
 	def popl_cell_list(self):
+		"""populates cell_list from cells listed in sec_list. If each cell is in at least one section, than this should populate all cells."""
 		for sec in self.sec_list:
 			for c in sec:
 				if c not in self.cell_list:
 					self.cell_list.append(c)
 
-	#popl_p_dict()
-	#desc: populates p_cell_dict with possibilities for each cell
-	#params:
-	#val_list: list of possible values that any cell can have
 	def popl_p_dict(self,val_list):
+		"""
+		populates p_cell_dict with possibilities for each cell
+
+		:param val_list: list of possible values that any cell can have
+		"""
 		for c in self.cell_list:
 			self.p_cell_dict[c] = val_list
 
-	#popl_cell_index()
-	#desc: populates the cell index from the section list
 	def popl_cell_index(self):
+		"""populates the cell index from the section list"""
 		for c in self.cell_list:
 			self.cell_sec_index[c] = []
 		count = 0
@@ -76,12 +77,13 @@ class Sudoku:
 
 	#PARSING AND SETTING:
 
-	#set_value
-	#desc: sets the value for a particular cell and updates possibilities for other cells that share a section.
-	#params:
-	#c: cell location
-	#val: value to set at cell location
 	def set_value(self,c,val):
+		"""
+		sets the value for a particular cell and updates possibilities for other cells that share a section.
+
+		:param c: cell location
+		:param val: value to set at cell location
+		"""
 		if self.has_error or self.is_complete(): #do not parse with errors.
 			return
 		if val not in self.p_cell_dict[c]:
@@ -96,12 +98,13 @@ class Sudoku:
 				self.rm_possibl(rm_c,val)
 		self.p_cell_dict[c] = [val]
 
-	#rm_possibl
-	#desc: removes possible cell values from the possible cell values list, and then sets value if there is only one possible value.
-	#params:
-	#c: cell location
-	#val: value to be removed
 	def rm_possibl(self,c,val):
+		"""
+		removes possible cell values from the possible cell values list, and then sets value if there is only one possible value.
+
+		:param c: cell location
+		:param val: value to be removed
+		"""
 		if self.has_error or (c in self.cell_dict) or self.is_complete():
 			return #do not parse with errors or replicate efforts.
 
@@ -120,27 +123,29 @@ class Sudoku:
 
 	#BRUTE FORCE
 
-	#is_complete
-	#desc: checks if the sudoku is complete.
-	#returns: True if it is, false otherwise
 	def is_complete(self):
+		"""
+		checks if the sudoku is complete.
+		:return bool:
+		"""
 		return (len(self.cell_list) == len(self.cell_dict))
 
-	#set_poss_value
-	#desc: sets a possible value, even though it might not be the value.
-	#returns: a tuple consisting of a cell location and it's possible values.
 	def set_poss_value(self):
+		"""
+		sets a possible value, even though it might not be the value.
+		:return tuple: tuple of a cell location and it's possible values.
+		"""
 		for c in self.p_cell_dict:
 			if not self.cell_dict[c]:
 				self.set_value(c,self.p_cell_dict[c][0])
 				return (c,self.p_cell_dict[c][0])
 
-
-
-	#brute
-	#desc: brute forces until we find a logical contradiction.
-	#calls: main,set_poss_value,rm_possible
 	def brute(self):
+		"""
+		brute forces until we find a logical contradiction.
+		calls: main,set_poss_value,rm_possible
+
+		"""
 		new_sudoku = self
 		c_and_val = new_sudoku.set_poss_value()
 		new_sudoku.main()
@@ -149,10 +154,11 @@ class Sudoku:
 		else:
 			self = new_sudoku
 
-	#main
-	#desc: runs Sudoku class methods until sudoku is complete
-	#calls: brute
 	def main(self):
+		"""
+		runs Sudoku class methods until sudoku is complete
+		calls: brute()
+		"""
 		while not self.is_complete():
 			self.brute()
 

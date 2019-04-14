@@ -4,15 +4,15 @@
 #FORMS
 #-----
 
-#Form
-#desc: contains members for setting forms
-#members:
-#init_str - this is the unparsed string.
-#t_str - this is the parsed string.
-#form_dict - this defines which form substitutions to make.
-
 import re
 class Form:
+	"""
+	desc: contains members for setting forms
+	members:
+	init_str - this is the unparsed string.
+	t_str - this is the parsed string.
+	form_dict - this defines which form substitutions to make.
+	"""
 
 	def __init__(self,init_str,form_dict): #make form_dict optional??
 		self.delim1 = '[['
@@ -20,16 +20,14 @@ class Form:
 		self.delim_mid = '##'
 		self.init_str = init_str
 		self.form_dict = form_dict
-		self.form_eval()
 
 	def add(self,key,value):
-		form_dict[key] = value
+		self.form_dict[key] = value
 	def delete(self,key):
-		del form_dict[key]
+		del self.form_dict[key]
 
-	#form_eval
-	#desc: given a string and args, attempts to perform regex replacements to fill in the form. Matches on <delim1><tag><delim_mid><default><delim2>. Right now, these can only span a single line.
 	def form_eval(self):
+		"""desc: given a string and args, attempts to perform regex replacements to fill in the form. Matches on <delim1><tag><delim_mid><default><delim2>. Right now, these can only span a single line."""
 
 		prev_t_str = ""
 		self.t_str = self.init_str
@@ -49,25 +47,29 @@ class Form:
 
 #---------
 #file operations
-#form
-#desc: generates a return string from form function.
-#params:
-#form_file: file which we use for replacements
-#form_dict: how to perform form replacements.
 import os
 def form(form_file,form_dict):
+	"""
+	generates a return string from form function.
+	
+	:param form_file: file which we use for replacements
+	:param form_dict: how to perform form replacements.
+	"""
 	root_path = os.path.abspath(os.pardir)
 	form_file = root_path + '/forms/' + form_file
 	with open(form_file,'r') as fin:
 		f = Form(fin.read(),form_dict)
 	return f.form_eval()
 
-#form_x
-#desc: same as above, except assumes all tags in the form are number, and uses the additional arguments in *args to fill out those tag values.
-#params:
-#form_file: file which we use for replacements
-#*args: optional arguments which contain the form entries for the file in question, by number.
 def form_x(form_file,*args):
+	"""
+	same as above, except assumes all tags in the form are number, and uses the additional arguments in *args to fill out those tag values.
+
+	:param form_file: file which we use for replacements
+	:param *args: optional arguments which contain the form entries for the file in question, by number.
+	"""
+
+	form_dict = {}
 	count = 0
 	for arg in args:
 		count += 1
