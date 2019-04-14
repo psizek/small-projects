@@ -125,21 +125,50 @@ class Sudoku:
 			self.set_value(c,self.p_cell_dict[c][0])
 	
 
-	#ALGORITHMS
+	#STRATEGIES
 	def pre_brute(self):
 		"""
 		algorithms to run to try to solve before brute forcing to a solution.
 		:return bool: true if puzzle is complete, false OW
 		"""
-		for sec in self.sec_list:
-			self.checkForSets(sec)
-			if self.is_complete(): return True 
+		res = False
+		while not res:
+			for sec in self.sec_list:
+
+				res = self.checkforNakedSingles(sec)
+				if self.is_complete(): return True
+				if res: break
+
+				res = self.checkForSets(sec)
+				if self.is_complete(): return True 
+				if res: break
 		return False
 
+	#methods below here MUST return true if successful in doing something towards making a solution, and false OW
+
+	def checkforNakedSingles(self,sec):
+		"""if only a single cell in a space has a possible value, then use that as the value for the cell"""
+		ret_bool = False
+		val_index = {}
+		for c in sec:
+			if c in self.cell_dict: continue
+			for val in self.p_cell_dict[c]:
+				if c in val_index:
+					val_index[c] = False
+				val_index[c] = True
+		#set if we found one
+		for c in val_index:
+			if val_index[c]:
+				self.set_value(c,val_index[c])
+				if self.has_error or self.is_complete(): return True
+				ret_bool = True
+		return ret_bool
 
 	def checkForSets(self,sec):
 		"""if two (or set) of cells in the same sec share the same two (or set) number of values, then remove possible values from the rest of the pcell dict space."""
+		ret_bool = False
 		for c in sec:
+			if c in self.cell_dict: continue
 			p_vals = self.p_cell_dict[c]
 			count = len(p_vals)
 			match_index = []
@@ -154,8 +183,17 @@ class Sudoku:
 							if c_rm not in match_index:
 								for val in p_vals:
 									self.rm_possibl(c_rm,val)
-									if self.has_error or self.is_complete(): return
-
+									if self.has_error or self.is_complete(): return True
+									ret_bool = True
+		return ret_bool
+	
+	def checkforPointing(self,sec):
+		pass
+		#loop through possible values for a section, and store the cells that can have that value
+		#if this set of cells is a subset of another section, then we remove that value from all other cells in that other section
+		#maybe should add another class member that defines possible values for cells in a section?
+	
+				
 	#BRUTE FORCE
 
 	def is_complete(self):
