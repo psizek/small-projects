@@ -188,10 +188,28 @@ class Sudoku:
 		return ret_bool
 	
 	def checkforPointing(self,sec):
-		pass
-		#loop through possible values for a section, and store the cells that can have that value
-		#if this set of cells is a subset of another section, then we remove that value from all other cells in that other section
-		#maybe should add another class member that defines possible values for cells in a section?
+		"""an extension of the naked_singles logic in some respects"""
+		ret_bool = False
+		val_index = []
+		for c in sec:
+			for p_val in self.p_cell_dict[c]:
+				if p_val not in val_index:
+					c_list = []
+					val_index.append(p_val)
+					for c_with_val in sec:
+						if p_val in self.p_cell_dict[c_with_val]:
+							c_list.append(c_with_val)
+					if c_list:
+						#look to see if c_list is a subset of a section
+						for mod_sec in self.sec_list:
+							if mod_sec == sec: continue
+							if set(c_list).issubset(set(mod_sec)):
+								for mod_c in mod_sec:
+									if mod_c in c_list: continue
+									if p_val in self.p_cell_dict[mod_c]:
+										self.rm_possibl(mod_c,p_val)
+										ret_bool = True
+		return ret_bool
 	
 				
 	#BRUTE FORCE
