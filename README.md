@@ -1,6 +1,7 @@
 # small-projects
 Small scripts I've written for specific problems I'm having or just to practice programming skills
 
+These probably should be their own repos or gists. Perhaps I'll separate these out in the future.
 
 ## bash_scripts
 Contains a couple bash scripts.

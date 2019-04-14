@@ -1,0 +1,5 @@
+*.pyc
+
+#the below lines would actually be a good idea to comment out, but leaving up for demonstration purposes
+#/doc_gen_tool/forms 
+#/doc_gen_tool/output
