@@ -3,6 +3,9 @@
 #possible future functionality:
 #check for more than one solution - which'd mean running brute a few times, which could have some efficiency problems.
 #generate sudoku? probably easiest solution is random fill in of values, and then subsequently checking/adding possible values until it's solved. Would need a "random generate" function.
+#additional algorithms? Only one fairly simple algorithm right now to demonstrate how we'd do it.
+
+#add a timeout function? for brute and main?
 
 class Sudoku:
 	"""
@@ -23,7 +26,7 @@ class Sudoku:
 	4) run popl_cell_index(), which populates an index based on sec_list.
 
 	running:
-	sudokus are calculated automatically whenever a value is set, and completes upon setting enough values. If this is insufficient to solve, use main() to do some brute force solving.
+	sudokus are calculated automatically whenever a value is set, and completes upon setting enough values. If this is insufficient to solve, use main() to 1) try some other algorithms and 2) do some brute force solving.
 
 	results:
 	results are in cell_dict for each cell.
@@ -120,6 +123,38 @@ class Sudoku:
 		#set value if there's only one possibility left
 		if len(self.p_cell_dict[c]) == 1:
 			self.set_value(c,self.p_cell_dict[c][0])
+	
+
+	#ALGORITHMS
+	def pre_brute(self):
+		"""
+		algorithms to run to try to solve before brute forcing to a solution.
+		:return bool: true if puzzle is complete, false OW
+		"""
+		for sec in self.sec_list:
+			self.checkForSets(sec)
+			if self.is_complete(): return True 
+		return False
+
+
+	def checkForSets(self,sec):
+		"""if two (or set) of cells in the same sec share the same two (or set) number of values, then remove possible values from the rest of the pcell dict space."""
+		for c in sec:
+			p_vals = self.p_cell_dict[c]
+			count = len(p_vals)
+			match_index = []
+			count_match = 0
+			for c_match in sec:
+				p_vals_match = self.p_cell_dict[c_match]
+				if p_vals_match == p_vals:
+					match_index.append(c_match)
+					count_match += 1
+					if count_match == count:
+						for c_rm in sec:
+							if c_rm not in match_index:
+								for val in p_vals:
+									self.rm_possibl(c_rm,val)
+									if self.has_error or self.is_complete(): return
 
 	#BRUTE FORCE
 
@@ -160,8 +195,9 @@ class Sudoku:
 		calls: brute()
 		"""
 		while not self.is_complete():
+		#	if self.pre_brute(): break
 			self.brute()
-
+	
 
 #solve a normal sudoku
 mySudoku = Sudoku()
