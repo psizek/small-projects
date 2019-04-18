@@ -12,9 +12,6 @@ Given an input directory, this change the filenames in that subdirectory so spac
 ### single_letter.sh
 Given a input word, this returns a list of words that could be made by changing a single letter in that word. E.g. 'real' becomes 'teal', 'meal', 'deal', 'ream', etc.
 
-## compsci_notes
-Contains some of my notes taken on different tools/languages.
-
 ## doc_gen_tool
 This is a tool for generating documents programatically (e.g. from a database).  This has two main components:
 
